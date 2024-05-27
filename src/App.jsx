@@ -6,6 +6,8 @@ import { Routes, Route } from 'react-router-dom';
 import SignUp from "./components/SignUp";
 import Topics from "./components/Topics";
 import Quiz from "./components/Quiz";
+import Results from "./components/Results";
+import { UserProvider } from "./UserContext";
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -17,16 +19,17 @@ function App() {
   }, [])
 
   return (
-    <>
-      <Routes>
-        <Route path="/" element={ loading ? <LoaderPage /> : <SignUp />   } />
-        <Route path="/login" element={ <LoginPage /> } />
-        <Route path="/courseSelection" element={ <CourseSelection /> } />
-        <Route path="/courseSelection/biochemistry" element={ <Topics /> } />
-        <Route path="/courseSelection/biochemistry/:course" element={ <Quiz /> } />
-      </Routes>
-    </>
+    <UserProvider>
+        <Routes>
+          <Route path="/" element={loading ? <LoaderPage /> : <SignUp />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/courseSelection" element={<CourseSelection />} />
+          <Route path="/courseSelection/:topic" element={<Topics />} />
+          <Route path="/courseSelection/:topic/quiz" element={<Quiz />} />
+          <Route path="/results" element={<Results />} />
+        </Routes>
+    </UserProvider>
   )
 }
 
-export default App
+export default App;
