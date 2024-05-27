@@ -1,121 +1,4 @@
-// import GoogleImg from '/Google.png';
-// import BookImg from '/Book.png';
-// import { Link } from 'react-router-dom';
-// import { useState } from 'react';
-// import { createUserWithEmailAndPassword } from 'firebase/auth';
-// import { auth } from '../firebase-config';
-
-// function SignUp() {
-//     const [userEmail, setUserEmail] = useState("");
-//     const [userPassword, setUserPassword] = useState("");
-//     // const [userFirstname, setUserFirstname] = useState("");
-//     // const [userLastname, setUserLastname] = useState("");
-
-//     const signUp = async (event) => {
-//         event.preventDefault();
-//         try {
-//             const userCredential = await createUserWithEmailAndPassword(
-//                 auth,
-//                 userEmail,
-//                 userPassword
-//             );
-//             const user = userCredential.user;
-//             console.log(user);
-//         } catch (error) {
-//             console.error("Error signing up:", error);
-//         }
-//     };
-
-//     const signInWithGoogle = async () => {
-//         signInWithPopup(auth, provider)
-//         .then((result) => {
-//             // This gives you a Google Access Token. You can use it to access the Google API.
-//             const credential = GoogleAuthProvider.credentialFromResult(result);
-//             const token = credential.accessToken;
-//             // The signed-in user info.
-//             const user = result.user;
-//             // IdP data available using getAdditionalUserInfo(result)
-//             // ...
-//         }).catch((error) => {
-//             // Handle Errors here.
-//             const errorCode = error.code;
-//             const errorMessage = error.message;
-//             // The email of the user's account used.
-//             const email = error.customData.email;
-//             // The AuthCredential type that was used.
-//             const credential = GoogleAuthProvider.credentialFromError(error);
-//             // ...
-//         });
-//     }
-
-//     return(
-//         <main className='bg-yellow font-Raleway h-screen px-3.5 py-10 flex justify-center'>
-//             <div className='md:max-w-99'>
-//                 <img src={BookImg} className='pb-4'/>
-//                 <form id='signUpFOrm'>
-//                     <button
-//                         className='flex items-center justify-center gap-3 my-4 border-2 rounded-md w-full text-lg font-bold p-1 hover:text-white'
-//                         onClick={signInWithGoogle}
-//                     >
-//                         <img src={GoogleImg} />
-//                         Continue with Google
-//                     </button>
-//                     <p className='text-center'>Or</p>
-//                     {/* <input
-//                         type='text'
-//                         placeholder='Firstname'
-//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
-//                         onChange={e => {
-//                             setUserFirstname(e.target.value)
-//                         }}
-//                     /> */}
-//                     {/* <input
-//                         type='text'
-//                         placeholder='Surname'
-//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
-//                         onChange={e => {
-//                             setUserLastname(e.target.value)
-//                         }}
-//                     /> */}
-//                     <input
-//                         type='email'
-//                         placeholder='Email'
-//                         id='email'
-//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
-//                         onChange={e => {
-//                             setUserEmail(e.target.value);
-//                         }}
-//                     />
-//                     <input
-//                         type='password'
-//                         placeholder='Password'
-//                         id='password'
-//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
-//                         onChange={e => {
-//                             setUserPassword(e.target.value);
-//                         }}
-//                     />
-//                     {/* <input
-//                         type='password'
-//                         placeholder='Confirm Password'
-//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
-//                     /> */}
-//                     <button
-//                         className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black'
-//                         onClick={signUp}
-//                     >
-//                         Create Account
-//                     </button>
-//                     <p className='text-center text-lg'>Already have an account? <Link to='/login'>Log In</Link></p>
-//                 </form>
-//             </div>
-//         </main>
-//     )
-// }
-
-// export default SignUp;
-
-
+// import { useContext } from 'react';
 // import GoogleImg from '/Google.png';
 // import BookImg from '/Book.png';
 // import { Link, useNavigate } from 'react-router-dom';
@@ -124,51 +7,49 @@
 //     createUserWithEmailAndPassword,
 //     signInWithPopup,
 //     signInWithRedirect,
-//     GoogleAuthProvider,
+//     GoogleAuthProvider
 // } from 'firebase/auth';
 // import { auth } from '../firebase-config';
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
+// import { UserContext } from '../UserContext';
 
 // function SignUp() {
+//     const { setUser } = useContext(UserContext);
 //     const [userEmail, setUserEmail] = useState("");
 //     const [userPassword, setUserPassword] = useState("");
 //     const navigate = useNavigate();
-//     const provider = new GoogleAuthProvider();
 
 //     const signUp = async (event) => {
 //         event.preventDefault();
 //         try {
 //             const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
 //             const user = userCredential.user;
-//             console.log(user);
+//             setUser(user);
 //             toast.success('Account created successfully!');
-//             navigate('/courseSelection', { state: { user: { email: user.email, displayName: user.displayName, photoURL: user.photoURL } } });
+//             navigate('/courseSelection');
 //         } catch (error) {
 //             console.error("Error signing up:", error);
 //             toast.error(`Error signing up: ${error.message}`);
 //         }
 //     };
 
+//     const provider = new GoogleAuthProvider();
+
 //     const signInWithGoogle = async () => {
 //         try {
-//             const result = await signInWithPopup(auth, provider);
-//             const user = result.user;
-//             console.log(user);
-//             toast.success('Signed in with Google successfully!');
-//             navigate('/courseSelection', { state: { user: { email: user.email, displayName: user.displayName, photoURL: user.photoURL } } });
-//         } catch (error) {
-//             if (error.code === 'auth/popup-blocked') {
-//                 try {
-//                     await signInWithRedirect(auth, provider);
-//                 } catch (redirectError) {
-//                     console.error("Error signing in with Google:", redirectError);
-//                     toast.error(`Error signing in with Google: ${redirectError.message}`);
-//                 }
+//             if (window.innerWidth <= 768) {
+//                 await signInWithRedirect(auth, provider);
 //             } else {
-//                 console.error("Error signing in with Google:", error);
-//                 toast.error(`Error signing in with Google: ${error.message}`);
+//                 const result = await signInWithPopup(auth, provider);
+//                 const user = result.user;
+//                 setUser(user);
+//                 navigate("/courseSelection");
+//                 toast.success('Signed in with Google successfully!');
 //             }
+//         } catch (error) {
+//             console.error("Error signing in with Google:", error);
+//             toast.error(`Error signing in with Google: ${error.message}`);
 //         }
 //     };
 
@@ -220,37 +101,223 @@
 
 
 
+// import { useContext, useState } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+// import {
+//     createUserWithEmailAndPassword,
+//     signInWithPopup,
+//     signInWithRedirect,
+//     GoogleAuthProvider,
+//     sendEmailVerification,
+//     updateProfile
+// } from 'firebase/auth';
+// import { auth } from '../firebase-config';
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import { UserContext } from '../UserContext';
+// import GoogleImg from '/Google.png';
+// import BookImg from '/Book.png';
 
-import { useContext } from 'react';
-import GoogleImg from '/Google.png';
-import BookImg from '/Book.png';
+// function SignUp() {
+//     const { setUser } = useContext(UserContext);
+//     const [userEmail, setUserEmail] = useState("");
+//     const [userPassword, setUserPassword] = useState("");
+//     const [confirmPassword, setConfirmPassword] = useState("");
+//     const [firstName, setFirstName] = useState("");
+//     const [lastName, setLastName] = useState("");
+//     const [passwordError, setPasswordError] = useState("");
+//     const navigate = useNavigate();
+
+//     const validatePasswords = () => {
+//         if (userPassword !== confirmPassword) {
+//             setPasswordError("Passwords do not match");
+//             return false;
+//         } else {
+//             setPasswordError("");
+//             return true;
+//         }
+//     };
+
+//     const signUp = async (event) => {
+//         event.preventDefault();
+//         if (!validatePasswords()) return;
+
+//         try {
+//             const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+//             const user = userCredential.user;
+//             await updateProfile(user, { displayName: `${firstName} ${lastName}` });
+//             await sendEmailVerification(user);
+//             setUser(user);
+//             toast.success('Account created successfully! Please verify your email before logging in.');
+//             navigate('/login');
+//         } catch (error) {
+//             console.error("Error signing up:", error);
+//             toast.error(`Error signing up: ${error.message}`);
+//         }
+//     };
+
+//     const provider = new GoogleAuthProvider();
+
+//     const signInWithGoogle = async () => {
+//         try {
+//             if (window.innerWidth <= 768) {
+//                 await signInWithRedirect(auth, provider);
+//             } else {
+//                 const result = await signInWithPopup(auth, provider);
+//                 const user = result.user;
+//                 setUser(user);
+//                 navigate("/courseSelection");
+//                 toast.success('Signed in with Google successfully!');
+//             }
+//         } catch (error) {
+//             console.error("Error signing in with Google:", error);
+//             toast.error(`Error signing in with Google: ${error.message}`);
+//         }
+//     };
+
+//     return (
+//         <main className='bg-yellow font-Raleway h-screen px-3.5 py-10 flex justify-center'>
+//             <div className='md:max-w-99'>
+//                 <img src={BookImg} className='pb-4' alt="Book" />
+//                 <form id='signUpForm' onSubmit={signUp}>
+//                     <button
+//                         type="button"
+//                         className='flex items-center justify-center gap-3 my-4 border-2 rounded-md w-full text-lg font-bold p-1 hover:text-white'
+//                         onClick={signInWithGoogle}
+//                     >
+//                         <img src={GoogleImg} alt="Google" />
+//                         Continue with Google
+//                     </button>
+//                     <p className='text-center'>Or</p>
+//                     <input
+//                         type='text'
+//                         placeholder='First Name'
+//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+//                         onChange={e => setFirstName(e.target.value)}
+//                         required
+//                     />
+//                     <input
+//                         type='text'
+//                         placeholder='Last Name'
+//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+//                         onChange={e => setLastName(e.target.value)}
+//                         required
+//                     />
+//                     <input
+//                         type='email'
+//                         placeholder='Email'
+//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+//                         onChange={e => setUserEmail(e.target.value)}
+//                         required
+//                     />
+//                     <input
+//                         type='password'
+//                         placeholder='Password'
+//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+//                         onChange={e => setUserPassword(e.target.value)}
+//                         required
+//                     />
+//                     <input
+//                         type='password'
+//                         placeholder='Confirm Password'
+//                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+//                         onChange={e => setConfirmPassword(e.target.value)}
+//                         required
+//                     />
+//                     {passwordError && <p className="text-wrong">{passwordError}</p>}
+//                     <button
+//                         type='submit'
+//                         className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black'
+//                     >
+//                         Create Account
+//                     </button>
+//                     <p className='text-center text-lg'>Already have an account? <Link to='/login'>Log In</Link></p>
+//                 </form>
+//             </div>
+//             <ToastContainer />
+//         </main>
+//     );
+// }
+
+// export default SignUp;
+
+
+
+import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import {
     createUserWithEmailAndPassword,
     signInWithPopup,
-    signInWithRedirect,
-    GoogleAuthProvider
+    GoogleAuthProvider,
+    sendEmailVerification,
+    updateProfile
 } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../UserContext';
+import GoogleImg from '/Google.png';
+import BookImg from '/Book.png';
 
 function SignUp() {
     const { setUser } = useContext(UserContext);
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [passwordTouched, setPasswordTouched] = useState(false);
+    const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        validatePasswords();
+    }, [userPassword, confirmPassword]);
+
+    const validatePasswords = () => {
+        if (!passwordTouched && !confirmPasswordTouched) return;
+
+        let passwordErrorMessage = "";
+        let confirmPasswordErrorMessage = "";
+
+        if (userPassword !== confirmPassword) {
+            confirmPasswordErrorMessage = "Passwords do not match";
+        }
+
+        if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(userPassword)) {
+            passwordErrorMessage = "Password must be at least 8 characters long and include letters, numbers, and special characters";
+        }
+
+        setPasswordError(passwordErrorMessage);
+        setConfirmPasswordError(confirmPasswordErrorMessage);
+    };
+
+    const clearFields = () => {
+        setUserEmail("");
+        setUserPassword("");
+        setConfirmPassword("");
+        setFirstName("");
+        setLastName("");
+        setPasswordTouched(false);
+        setConfirmPasswordTouched(false);
+    };
 
     const signUp = async (event) => {
         event.preventDefault();
+        validatePasswords();
+        if (passwordError || confirmPasswordError) return;
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
             const user = userCredential.user;
+            await updateProfile(user, { displayName: `${firstName} ${lastName}` });
+            await sendEmailVerification(user);
             setUser(user);
-            toast.success('Account created successfully!');
-            navigate('/courseSelection');
+            clearFields();
+            toast.success('Account created successfully! Please verify your email before logging in.');
+            //navigate('/login');
         } catch (error) {
             console.error("Error signing up:", error);
             toast.error(`Error signing up: ${error.message}`);
@@ -261,15 +328,11 @@ function SignUp() {
 
     const signInWithGoogle = async () => {
         try {
-            if (window.innerWidth <= 768) {
-                await signInWithRedirect(auth, provider);
-            } else {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                setUser(user);
-                navigate("/courseSelection");
-                toast.success('Signed in with Google successfully!');
-            }
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            setUser(user);
+            navigate("/courseSelection");
+            toast.success('Signed in with Google successfully!');
         } catch (error) {
             console.error("Error signing in with Google:", error);
             toast.error(`Error signing in with Google: ${error.message}`);
@@ -291,21 +354,51 @@ function SignUp() {
                     </button>
                     <p className='text-center'>Or</p>
                     <input
+                        type='text'
+                        placeholder='First Name'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        onChange={e => setFirstName(e.target.value)}
+                        value={firstName}
+                        required
+                    />
+                    <input
+                        type='text'
+                        placeholder='Last Name'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        onChange={e => setLastName(e.target.value)}
+                        value={lastName}
+                        required
+                    />
+                    <input
                         type='email'
                         placeholder='Email'
-                        id='email'
                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
                         onChange={e => setUserEmail(e.target.value)}
+                        value={userEmail}
                         required
                     />
                     <input
                         type='password'
                         placeholder='Password'
-                        id='password'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className={`border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black ${userPassword !== "" && passwordTouched && (passwordError ? 'border-wrong' : 'border-correct')}`}
                         onChange={e => setUserPassword(e.target.value)}
+                        onBlur={() => setPasswordTouched(true)}
+                        value={userPassword}
                         required
                     />
+                    {passwordTouched && passwordError && <p className="text-wrong">{passwordError}</p>}
+                    {userPassword !== "" && !passwordError && passwordTouched && <p className="text-correct">Password is strong.</p>}
+                    <input
+                        type='password'
+                        placeholder='Confirm Password'
+                        className={`border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black ${confirmPasswordTouched && (confirmPasswordError ? 'border-wrong' : 'border-correct')}`}
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        onBlur={() => setConfirmPasswordTouched(true)}
+                        value={confirmPassword}
+                        required
+                    />
+                    {confirmPasswordTouched && confirmPasswordError && <p className="text-wrong">{confirmPasswordError}</p>}
+                    {!confirmPasswordError && confirmPasswordTouched && <p className="text-correct">Passwords match.</p>}
                     <button
                         type='submit'
                         className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black'
@@ -314,8 +407,8 @@ function SignUp() {
                     </button>
                     <p className='text-center text-lg'>Already have an account? <Link to='/login'>Log In</Link></p>
                 </form>
+                <ToastContainer />
             </div>
-            <ToastContainer />
         </main>
     );
 }

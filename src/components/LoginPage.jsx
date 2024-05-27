@@ -2,7 +2,12 @@ import { useContext } from 'react';
 import GoogleImg from '/Google.png';
 import BookImg from '/Book.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, GoogleAuthProvider } from 'firebase/auth';
+import {
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signInWithRedirect,
+    GoogleAuthProvider
+} from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,8 +25,14 @@ function LoginPage() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
             const user = userCredential.user;
-            setUser(user);
-            navigate("/courseSelection");
+
+            // Check if email is verified
+            if (user.emailVerified) {
+                setUser(user);
+                navigate("/courseSelection");
+            } else {
+                toast.error('Please verify your email before logging in.');
+            }
         } catch (error) {
             console.error("Error signing in:", error);
             toast.error(`Error signing in: ${error.message}`);
@@ -93,4 +104,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
