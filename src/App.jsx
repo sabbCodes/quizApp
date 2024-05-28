@@ -8,6 +8,7 @@ import Topics from "./components/Topics";
 import Quiz from "./components/Quiz";
 import Results from "./components/Results";
 import { UserProvider } from "./UserContext";
+import ForgotPassword from "./components/ForgotPassword";
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={loading ? <LoaderPage /> : <SignUp />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/courseSelection" element={<CourseSelection />} />
           <Route path="/courseSelection/:topic" element={<Topics />} />
           <Route path="/courseSelection/:topic/quiz" element={<Quiz />} />
