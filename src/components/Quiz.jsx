@@ -21,6 +21,7 @@ function Quiz() {
     const [score, setScore] = useState(0);
     const [loading, setLoading] = useState(true);
     const [selectedOptions, setSelectedOptions] = useState({});
+    const [timeLeft, setTimeLeft] = useState(35 * 60); // 35 minutes in seconds
     const { topic } = useParams();
     const navigate = useNavigate();
 
@@ -52,6 +53,14 @@ function Quiz() {
                 return;
             }
 
+            // Check if data is already cached
+            const cachedQuestions = sessionStorage.getItem('questions');
+            if (cachedQuestions) {
+                setQuestions(JSON.parse(cachedQuestions));
+                setLoading(false);
+                return;
+            }
+
             try {
                 let allQuestions = [];
                 for (let topic of selectedTopics) {
@@ -59,9 +68,27 @@ function Quiz() {
                     const data = await getDocs(topicRef);
                     allQuestions = [...allQuestions, ...data.docs.map(doc => ({ ...doc.data(), id: doc.id }))];
                 }
-                if (allQuestions.length > 50) {
+
+                if (selectedTopics.length > 1) {
+                    // Shuffle and balance the questions equally if more than one topic is selected
+                    const topic1Questions = allQuestions.filter(q => q.topic === selectedTopics[0]);
+                    const topic2Questions = allQuestions.filter(q => q.topic === selectedTopics[1]);
+                    const balancedQuestions = [];
+                    for (let i = 0; i < 50; i++) {
+                        if (i % 2 === 0 && topic1Questions.length > 0) {
+                            balancedQuestions.push(topic1Questions.pop());
+                        } else if (topic2Questions.length > 0) {
+                            balancedQuestions.push(topic2Questions.pop());
+                        }
+                    }
+                    allQuestions = balancedQuestions;
+                } else {
+                    // Shuffle and limit the questions if only one topic is selected
                     allQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 50);
                 }
+
+                // Cache the questions
+                sessionStorage.setItem('questions', JSON.stringify(allQuestions));
                 setQuestions(allQuestions);
             } catch (err) {
                 toast.error('Error fetching questions');
@@ -93,36 +120,65 @@ function Quiz() {
         // Load the selected option when the question index changes
         if (selectedOptions[currentQuestionIndex] !== undefined) {
             setSelectedOption(selectedOptions[currentQuestionIndex]);
+            setHasAnswered(true);
+            setGotRightAnswer(selectedOptions[currentQuestionIndex] === questions[currentQuestionIndex].correctOption);
         } else {
             setSelectedOption(null);
+            setHasAnswered(false);
         }
-    }, [currentQuestionIndex, selectedOptions]);
+    }, [currentQuestionIndex, questions, selectedOptions]);
+
+    useEffect(() => {
+        if (timeLeft > 0) {
+            const timer = setInterval(() => {
+                setTimeLeft((prevTime) => prevTime - 1);
+            }, 1000);
+            return () => clearInterval(timer);
+        } else {
+            // Time's up, navigate to results
+            toast.info('Time is up!');
+            navigate('/results', { state: { score, totalQuestions: questions.length } });
+        }
+    }, [timeLeft, navigate, score, questions.length]);
+
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    };
 
     const handleResponse = (option) => {
         setSelectedOption(option);
-        setSelectedOptions(prevSelectedOptions => ({
-            ...prevSelectedOptions,
-            [currentQuestionIndex]: option
-        }));
     };
 
     const handleSubmit = () => {
+        // Check if the question has already been answered
+        if (selectedOptions[currentQuestionIndex] !== undefined) {
+            return; // Do nothing if the question has been answered
+        }
+
         const currentQuestion = questions[currentQuestionIndex];
-        if (selectedOption === currentQuestion.correctOption) {
-            setGotRightAnswer(true);
+        const correct = selectedOption === currentQuestion.correctOption;
+
+        setSelectedOptions(prevSelectedOptions => ({
+            ...prevSelectedOptions,
+            [currentQuestionIndex]: selectedOption
+        }));
+        setGotRightAnswer(correct);
+
+        if (correct) {
             setScore(prevScore => prevScore + 1);
             toast.success(getRandomMessage(correctMessages));
         } else {
-            setGotRightAnswer(false);
             toast.error(getRandomMessage(incorrectMessages));
         }
+
         setHasAnswered(true);
     };
 
     const handleNextQuestion = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
-            setHasAnswered(false);
         } else {
             toast.info('You have reached the end of the quiz');
             navigate('/results', { state: { score, totalQuestions: questions.length } });
@@ -132,7 +188,6 @@ function Quiz() {
     const handlePrevQuestion = () => {
         if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
-            setHasAnswered(false);
         } else {
             toast.info('This is the first question');
         }
@@ -146,6 +201,7 @@ function Quiz() {
             `}>
                 <div className="flex items-center text-center w-full">
                     <h2 className='font-semibold font-archivo text-white text-2xl mx-auto capitalize'>{topic}</h2>
+                    <span className='text-white'>{formatTime(timeLeft)}</span>
                 </div>
             </nav>
             <main className='w-11/12 mx-auto'>
@@ -250,6 +306,7 @@ function Quiz() {
                     <button
                         className='h-10 w-24 flex items-center gap-1 border-biochem border rounded-md text-lg text-biochem px-3 py-1 hover:duration-1000 hover:scale-105'
                         onClick={handleNextQuestion}
+                        disabled={!hasAnswered}
                     >
                         <span className='-mt-0.5'>Next</span>
                         <img src={AngleRight} alt='next question' className='h-4' />

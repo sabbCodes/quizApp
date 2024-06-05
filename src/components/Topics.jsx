@@ -105,7 +105,7 @@ function Topics() {
                         Start Quiz
                     </button>
                     <button
-                        className='py-2 px-10 gap-2 rounded-md md:max-w-52 w-60 h-10 my-2 border-blue text-blue border p-2 flex items-center hover:duration-1000 hover:scale-105 transition-all'
+                        className='py-2 px-10 gap-2 rounded-md md:px-6 md:max-w-52 w-60 h-10 my-2 border-blue text-blue border p-2 flex items-center hover:duration-1000 hover:scale-105 transition-all'
                     >
                         Shuffle Questions
                         <img src={Shuffle} alt='shuffle icon' />

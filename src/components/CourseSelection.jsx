@@ -94,7 +94,7 @@ function CourseSelection() {
                          <div className='flex items-center justify-between w-full mb-3 border-grey border p-2 rounded-lg hover:border-blue'>
                              <div>
                                  <h2 className='text-lg'>Pathology</h2>
-                                 <p className='text-xs'>Topics: 20</p>
+                                 <p className='text-xs'>Topics: Nill</p>
                              </div>
                              <div>
                                  <img src={ArrowRight} alt='Right arrow' />
@@ -105,7 +105,7 @@ function CourseSelection() {
                          <div className='flex items-center justify-between w-full my-3 border-grey border p-2 rounded-lg hover:border-blue'>
                              <div>
                                  <h2 className='text-lg'>Pharmacology</h2>
-                                 <p className='text-xs'>Topics: 20</p>
+                                 <p className='text-xs'>Topics: Nill</p>
                              </div>
                              <div>
                                  <img src={ArrowRight} alt='Right arrow' />

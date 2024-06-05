@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../UserContext';
 import GoogleImg from '/Google.png';
 import BookImg from '/Book.png';
+import { DNA } from 'react-loader-spinner';
 
 function SignUp() {
     const { setUser } = useContext(UserContext);
@@ -25,6 +26,7 @@ function SignUp() {
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [passwordTouched, setPasswordTouched] = useState(false);
     const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const validatePasswords = useCallback(() => {
@@ -63,6 +65,7 @@ function SignUp() {
         event.preventDefault();
         validatePasswords();
         if (passwordError || confirmPasswordError) return;
+        setLoading(true)
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
@@ -73,6 +76,7 @@ function SignUp() {
             clearFields();
             toast.success('Account created successfully! Please verify your email before logging in.');
             setTimeout(() => {
+                setLoading(false);
                 navigate('/login');
             }, 5000); // Delay for 5 seconds
         } catch (error) {
@@ -98,7 +102,7 @@ function SignUp() {
 
     return (
         <main className='bg-yellow font-Raleway h-screen px-3.5 py-10 flex justify-center'>
-            <div className='md:max-w-99'>
+            <div className='md:max-w-99 w-full max-w-sm'>
                 <img src={BookImg} className='pb-4' alt="Book" />
                 <form id='signUpForm' onSubmit={signUp}>
                     <button
@@ -112,6 +116,7 @@ function SignUp() {
                     <p className='text-center'>Or</p>
                     <input
                         type='text'
+                        id='firstName'
                         placeholder='First Name'
                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
                         onChange={e => setFirstName(e.target.value)}
@@ -120,6 +125,7 @@ function SignUp() {
                     />
                     <input
                         type='text'
+                        id='lastName'
                         placeholder='Last Name'
                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
                         onChange={e => setLastName(e.target.value)}
@@ -128,6 +134,7 @@ function SignUp() {
                     />
                     <input
                         type='email'
+                        id='email'
                         placeholder='Email'
                         className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
                         onChange={e => setUserEmail(e.target.value)}
@@ -158,11 +165,23 @@ function SignUp() {
                     {confirmPassword != "" && !confirmPasswordError && confirmPasswordTouched && <p className="text-correct text-xs">Passwords match.</p>}
                     <button
                         type='submit'
-                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black'
+                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black flex justify-center items-center'
+                        disabled={loading}
                     >
-                        Create Account
+                        {loading ? (
+                            <div className='flex justify-center items-center'>
+                                <DNA
+                                    visible={true}
+                                    height="40"
+                                    width="40"
+                                    ariaLabel="dna-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClass="dna-wrapper"
+                                />
+                            </div>
+                        ) : "Create Account"}
                     </button>
-                    <p className='text-center text-lg'>Already have an account? <Link to='/login'>Log In</Link></p>
+                    <p className='text-center text-lg'>Already have an account? <Link to='/login' className='hover:text-white hover:underline'>Log In</Link></p>
                 </form>
                 <ToastContainer />
             </div>
