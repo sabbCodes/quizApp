@@ -1,18 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthProvider';
 import ArrowRight from '/arrow-right.png';
 import ProfileIcon from '/profile-icon.jpg';
-import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
-import { useContext, useState } from 'react';
-import { UserContext } from '../UserContext';
+import { useState } from 'react';
+import { auth } from '../firebase-config';
 
 function CourseSelection() {
     const navigate = useNavigate();
-    const { user } = useContext(UserContext); // Access user from context
+    const { currentUser } = useAuth(); // Use the useAuth hook to get the current user
     const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-    const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Champ';
-    const role = user.role || 'Medic';
+    const firstName = currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'Champ';
+    const role = currentUser.role || 'Medic';
+
+    if (!currentUser) {
+        return <p>Loading...</p>;
+    }
 
     const handleLogout = async () => {
         try {
@@ -32,8 +36,8 @@ function CourseSelection() {
             <div className='w-full md:max-w-96'>
                 <div className='flex items-center justify-between w-full mb-4 p-2 border-b border-grey relative'>
                     <div className='flex items-center'>
-                        {user.photoURL ? (
-                            <img src={user.photoURL} alt="User Profile" className='w-12 h-12 rounded-full mr-4 cursor-pointer' onClick={toggleProfileMenu} />
+                        {currentUser.photoURL ? (
+                            <img src={currentUser.photoURL} alt="User Profile" className='w-12 h-12 rounded-full mr-4 cursor-pointer' onClick={toggleProfileMenu} />
                         ) : (
                             <img src={ProfileIcon} alt="User Profile" className='w-12 h-12 rounded-full mr-4 cursor-pointer' onClick={toggleProfileMenu} />
                         )}
@@ -45,7 +49,6 @@ function CourseSelection() {
                     {showProfileMenu && (
                         <div className="absolute right-0 mt-12 w-48 bg-white rounded-md shadow-lg z-10">
                             <div className="py-1">
-                                {/* Add any profile options you want here */}
                                 <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
                             </div>
                         </div>
@@ -94,7 +97,7 @@ function CourseSelection() {
                          <div className='flex items-center justify-between w-full mb-3 border-grey border p-2 rounded-lg hover:border-blue'>
                              <div>
                                  <h2 className='text-lg'>Pathology</h2>
-                                 <p className='text-xs'>Topics: Nill</p>
+                                 <p className='text-xs'>Topics: 10</p>
                              </div>
                              <div>
                                  <img src={ArrowRight} alt='Right arrow' />
@@ -105,7 +108,18 @@ function CourseSelection() {
                          <div className='flex items-center justify-between w-full my-3 border-grey border p-2 rounded-lg hover:border-blue'>
                              <div>
                                  <h2 className='text-lg'>Pharmacology</h2>
-                                 <p className='text-xs'>Topics: Nill</p>
+                                 <p className='text-xs'>Topics: 10</p>
+                             </div>
+                             <div>
+                                 <img src={ArrowRight} alt='Right arrow' />
+                             </div>
+                         </div>
+                     </Link>
+                     <Link to='microbiology'>
+                         <div className='flex items-center justify-between w-full my-3 border-grey border p-2 rounded-lg hover:border-blue'>
+                             <div>
+                                 <h2 className='text-lg'>Microbiology</h2>
+                                 <p className='text-xs'>Topics: 11</p>
                              </div>
                              <div>
                                  <img src={ArrowRight} alt='Right arrow' />
@@ -113,10 +127,9 @@ function CourseSelection() {
                          </div>
                      </Link>
                  </article>
-                <p>Check back for more courses...</p>
-            </div>
-        </main>
-    );
-}
+             </div>
+         </main>
+     );
+ }
 
 export default CourseSelection;

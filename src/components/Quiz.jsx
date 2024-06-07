@@ -21,7 +21,7 @@ function Quiz() {
     const [score, setScore] = useState(0);
     const [loading, setLoading] = useState(true);
     const [selectedOptions, setSelectedOptions] = useState({});
-    const [timeLeft, setTimeLeft] = useState(35 * 60); // 35 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(35 * 60);
     const { topic } = useParams();
     const navigate = useNavigate();
 
@@ -179,6 +179,8 @@ function Quiz() {
     const handleNextQuestion = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
+            setHasAnswered(false); // Reset hasAnswered to allow answering the next question
+            setSelectedOption(null); // Reset selectedOption for the next question
         } else {
             toast.info('You have reached the end of the quiz');
             navigate('/results', { state: { score, totalQuestions: questions.length } });
@@ -306,7 +308,6 @@ function Quiz() {
                     <button
                         className='h-10 w-24 flex items-center gap-1 border-biochem border rounded-md text-lg text-biochem px-3 py-1 hover:duration-1000 hover:scale-105'
                         onClick={handleNextQuestion}
-                        disabled={!hasAnswered}
                     >
                         <span className='-mt-0.5'>Next</span>
                         <img src={AngleRight} alt='next question' className='h-4' />

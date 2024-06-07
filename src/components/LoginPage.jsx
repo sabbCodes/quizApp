@@ -1,6 +1,4 @@
-import { useContext, useState } from 'react';
-import GoogleImg from '/Google.png';
-import BookImg from '/Book.png';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     signInWithEmailAndPassword,
@@ -10,11 +8,11 @@ import {
 import { auth } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../UserContext';
+import GoogleImg from '/Google.png';
+import BookImg from '/Book.png';
 import { DNA } from 'react-loader-spinner';
 
 function LoginPage() {
-    const { setUser } = useContext(UserContext);
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -25,23 +23,23 @@ function LoginPage() {
         setLoading(true);
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
-            const user = userCredential.user;
+            await signInWithEmailAndPassword(auth, userEmail, userPassword);
 
             // Check if email is verified
-            if (user.emailVerified) {
-                setUser(user);
+            const user = auth.currentUser;
+            if (user && user.emailVerified) {
                 toast.success('Signed in successfully!');
                 setTimeout(() => {
                     setLoading(false);
                     navigate("/courseSelection");
                 }, 5000); // Delay for 5 seconds
             } else {
+                setLoading(false);
                 toast.error('Please verify your email before logging in.');
             }
         } catch (error) {
-            console.error("Error signing in:", error);
-            toast.error(`Error signing in: ${error.message}`);
+            setLoading(false);
+            toast.error(`${error.message}`);
         }
     };
 
@@ -49,16 +47,11 @@ function LoginPage() {
 
     const signInWithGoogle = async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            setUser(user);
+            await signInWithPopup(auth, provider);
+            navigate("/courseSelection");
             toast.success('Signed in with Google successfully!');
-            setTimeout(() => {
-                navigate("/courseSelection");
-            }, 5000); // Delay for 5 seconds
         } catch (error) {
-            console.error("Error signing in with Google:", error);
-            toast.error(`Error signing in with Google: ${error.message}`);
+            toast.error(`${error.message}`);
         }
     };
 
@@ -104,8 +97,8 @@ function LoginPage() {
                             <div className='flex justify-center items-center'>
                                 <DNA
                                     visible={true}
-                                    height="40"
-                                    width="40"
+                                    height="30"
+                                    width="30"
                                     ariaLabel="dna-loading"
                                     wrapperStyle={{}}
                                     wrapperClass="dna-wrapper"

@@ -24,6 +24,7 @@ export default {
       'startBtn': '#4169E1',
       'wrong': '#B60000',
       'correct': '#4BB543',
+      'drkbiochem': '#204bce'
     },
     fontFamily: {
       'sans': ['ui-sans-serif', 'system-ui',],

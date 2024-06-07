@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     createUserWithEmailAndPassword,
@@ -10,13 +10,11 @@ import {
 import { auth } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../UserContext';
 import GoogleImg from '/Google.png';
 import BookImg from '/Book.png';
 import { DNA } from 'react-loader-spinner';
 
 function SignUp() {
-    const { setUser } = useContext(UserContext);
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -65,14 +63,13 @@ function SignUp() {
         event.preventDefault();
         validatePasswords();
         if (passwordError || confirmPasswordError) return;
-        setLoading(true)
+        setLoading(true);
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
-            const user = userCredential.user;
+            await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+            const user = auth.currentUser;
             await updateProfile(user, { displayName: `${firstName} ${lastName}` });
             await sendEmailVerification(user);
-            setUser(user);
             clearFields();
             toast.success('Account created successfully! Please verify your email before logging in.');
             setTimeout(() => {
@@ -80,8 +77,8 @@ function SignUp() {
                 navigate('/login');
             }, 5000); // Delay for 5 seconds
         } catch (error) {
-            console.error("Error signing up:", error);
-            toast.error(`Error signing up: ${error.message}`);
+            setLoading(false);
+            toast.error(`${error.message}`);
         }
     };
 
@@ -89,14 +86,11 @@ function SignUp() {
 
     const signInWithGoogle = async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            setUser(user);
+            await signInWithPopup(auth, provider);
             navigate("/courseSelection");
             toast.success('Signed in with Google successfully!');
         } catch (error) {
-            console.error("Error signing in with Google:", error);
-            toast.error(`Error signing in with Google: ${error.message}`);
+            toast.error(`${error.message}`);
         }
     };
 
@@ -172,8 +166,8 @@ function SignUp() {
                             <div className='flex justify-center items-center'>
                                 <DNA
                                     visible={true}
-                                    height="40"
-                                    width="40"
+                                    height="30"
+                                    width="30"
                                     ariaLabel="dna-loading"
                                     wrapperStyle={{}}
                                     wrapperClass="dna-wrapper"
