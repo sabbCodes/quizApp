@@ -20,7 +20,7 @@ function Topics() {
     const notify = message => toast.error(message);
 
     useEffect(() => {
-        const getQuestions = async () => {
+        const getTopics = async () => {
             try {
                 const data = await getDocs(topicsRef);
                 setTopics(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
@@ -36,7 +36,7 @@ function Topics() {
             }
         };
 
-        getQuestions();
+        getTopics();
     }, [topicsRef]);
 
     const handleCheck = (event, topicBranch) => {
@@ -49,6 +49,20 @@ function Topics() {
 
     const handleStartQuiz = () => {
         navigate(`/courseSelection/${topic}/quiz`, { state: { selectedTopics } });
+    };
+
+    const handleShuffle = () => {
+        if (topics.length > 1) {
+            const shuffledTopics = topics
+                .map(topic => topic.branch)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 2);
+            setSelectedTopics(shuffledTopics);
+        } else {
+            notify('Not enough topics to shuffle.');
+        }
+
+        handleStartQuiz();
     };
 
     return (
@@ -82,17 +96,19 @@ function Topics() {
                 </div>
             ) : (
                 <main className='my-4 mx-8'>
-                    {topics.map(topic => (
-                        <label key={topic.id} className='capitalize flex gap-3 border-2 border-grey rounded-lg p-3 mb-2'>
-                            <input
-                                type="checkbox"
-                                onChange={(event) => handleCheck(event, topic.branch)}
-                                checked={selectedTopics.includes(topic.branch)}
-                                disabled={selectedTopics.length > 1 && !selectedTopics.includes(topic.branch)}
-                            />
-                            {topic.branch}
-                        </label>
-                    ))}
+                    {topics ? (
+                        topics.map(topic => (
+                            <label key={topic.id} className='capitalize flex gap-3 border-2 border-grey rounded-lg p-3 mb-2'>
+                                <input
+                                    type="checkbox"
+                                    onChange={(event) => handleCheck(event, topic.branch)}
+                                    checked={selectedTopics.includes(topic.branch)}
+                                    disabled={selectedTopics.length > 1 && !selectedTopics.includes(topic.branch)}
+                                />
+                                {topic.branch}
+                            </label>
+                        ))
+                    ) : (<p>This course is not yet available, kindly check back later.</p>)}
                 </main>
             )}
             <footer className='bottom-6 left-0 right-0'>
@@ -105,6 +121,7 @@ function Topics() {
                         Start Quiz
                     </button>
                     <button
+                        onClick={handleShuffle}
                         className='py-2 px-10 gap-2 rounded-md md:px-6 md:max-w-52 w-60 h-10 my-2 border-blue text-blue border p-2 flex items-center hover:duration-1000 hover:scale-105 transition-all'
                     >
                         Shuffle Questions

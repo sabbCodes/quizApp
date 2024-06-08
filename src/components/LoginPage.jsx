@@ -56,7 +56,7 @@ function LoginPage() {
     };
 
     return (
-        <main className='bg-yellow font-Raleway h-screen px-3.5 py-10 flex justify-center'>
+        <main className='bg-white font-Raleway h-full px-3.5 py-10 flex justify-center'>
             <div className='md:max-w-99 w-full max-w-sm'>
                 <img src={BookImg} className='pb-4' alt="Book" />
                 <form onSubmit={signIn}>
@@ -73,7 +73,7 @@ function LoginPage() {
                         type='email'
                         placeholder='Email'
                         id='email'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setUserEmail(e.target.value)}
                         required
                     />
@@ -81,16 +81,16 @@ function LoginPage() {
                         type='password'
                         placeholder='Password'
                         id='password'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setUserPassword(e.target.value)}
                         required
                     />
                     <div className='text-right my-2'>
-                        <Link to='/forgot-password' className='text-black hover:underline hover:text-white'>Forgot password?</Link>
+                        <Link to='/forgot-password' className='text-black hover:underline hover:text-biochem'>Forgot password?</Link>
                     </div>
                     <button
                         type='submit'
-                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black flex justify-center items-center'
+                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-grey hover:text-black flex justify-center items-center'
                         disabled={loading}
                     >
                         {loading ? (
@@ -106,7 +106,7 @@ function LoginPage() {
                             </div>
                         ) : "Log In"}
                     </button>
-                    <p className='text-center text-lg'>Do not have an account? <Link to='/' className='hover:text-white hover:underline'>Sign Up</Link></p>
+                    <p className='text-center text-lg'>Do not have an account? <Link to='/' className='hover:text-biochem hover:underline'>Sign Up</Link></p>
                 </form>
             </div>
             <ToastContainer />

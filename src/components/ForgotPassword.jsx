@@ -24,7 +24,7 @@ function ForgotPassword() {
     };
 
     return (
-        <main className='bg-yellow font-Raleway h-screen px-3.5 py-10 flex justify-center'>
+        <main className='bg-white font-Raleway h-screen px-3.5 py-10 flex justify-center'>
             <div className='md:max-w-99'>
                 <form onSubmit={handleResetPassword}>
                     <h2 className='text-center text-lg font-bold mb-4'>Reset Password</h2>
@@ -32,7 +32,7 @@ function ForgotPassword() {
                         type='email'
                         id='email'
                         placeholder='Email'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setEmail(e.target.value)}
                         required
                     />

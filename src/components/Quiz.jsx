@@ -53,8 +53,10 @@ function Quiz() {
                 return;
             }
 
+            const cacheKey = `questions_${selectedTopics.join('_')}`;
+
             // Check if data is already cached
-            const cachedQuestions = sessionStorage.getItem('questions');
+            const cachedQuestions = sessionStorage.getItem(cacheKey);
             if (cachedQuestions) {
                 setQuestions(JSON.parse(cachedQuestions));
                 setLoading(false);
@@ -88,7 +90,7 @@ function Quiz() {
                 }
 
                 // Cache the questions
-                sessionStorage.setItem('questions', JSON.stringify(allQuestions));
+                sessionStorage.setItem(cacheKey, JSON.stringify(allQuestions));
                 setQuestions(allQuestions);
             } catch (err) {
                 toast.error('Error fetching questions');

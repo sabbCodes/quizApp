@@ -95,7 +95,7 @@ function SignUp() {
     };
 
     return (
-        <main className='bg-yellow font-Raleway h-screen px-3.5 py-10 flex justify-center'>
+        <main className='bg-white font-Raleway h-full px-3.5 py-10 flex justify-center'>
             <div className='md:max-w-99 w-full max-w-sm'>
                 <img src={BookImg} className='pb-4' alt="Book" />
                 <form id='signUpForm' onSubmit={signUp}>
@@ -112,7 +112,7 @@ function SignUp() {
                         type='text'
                         id='firstName'
                         placeholder='First Name'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setFirstName(e.target.value)}
                         value={firstName}
                         required
@@ -121,7 +121,7 @@ function SignUp() {
                         type='text'
                         id='lastName'
                         placeholder='Last Name'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setLastName(e.target.value)}
                         value={lastName}
                         required
@@ -130,7 +130,7 @@ function SignUp() {
                         type='email'
                         id='email'
                         placeholder='Email'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setUserEmail(e.target.value)}
                         value={userEmail}
                         required
@@ -138,7 +138,7 @@ function SignUp() {
                     <input
                         type='password'
                         placeholder='Password'
-                        className={`border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black ${userPassword !== "" && passwordTouched && (passwordError ? 'border-wrong' : 'border-correct')}`}
+                        className={`border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black ${userPassword !== "" && passwordTouched && (passwordError ? 'border-wrong' : 'border-correct')}`}
                         onChange={e => setUserPassword(e.target.value)}
                         onBlur={() => setPasswordTouched(true)}
                         value={userPassword}
@@ -149,7 +149,7 @@ function SignUp() {
                     <input
                         type='password'
                         placeholder='Confirm Password'
-                        className={`border-2 rounded-md w-full text-lg p-1 bg-yellow my-2 px-2 text-black ${confirmPassword !== "" && confirmPasswordTouched && (confirmPasswordError ? 'border-wrong' : 'border-correct')}`}
+                        className={`border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black ${confirmPassword !== "" && confirmPasswordTouched && (confirmPasswordError ? 'border-wrong' : 'border-correct')}`}
                         onChange={e => setConfirmPassword(e.target.value)}
                         onBlur={() => setConfirmPasswordTouched(true)}
                         value={confirmPassword}
@@ -159,7 +159,7 @@ function SignUp() {
                     {confirmPassword != "" && !confirmPasswordError && confirmPasswordTouched && <p className="text-correct text-xs">Passwords match.</p>}
                     <button
                         type='submit'
-                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black flex justify-center items-center'
+                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-grey hover:text-black flex justify-center items-center'
                         disabled={loading}
                     >
                         {loading ? (
@@ -175,7 +175,7 @@ function SignUp() {
                             </div>
                         ) : "Create Account"}
                     </button>
-                    <p className='text-center text-lg'>Already have an account? <Link to='/login' className='hover:text-white hover:underline'>Log In</Link></p>
+                    <p className='text-center text-lg'>Already have an account? <Link to='/login' className='hover:text-biochem hover:underline'>Log In</Link></p>
                 </form>
                 <ToastContainer />
             </div>
