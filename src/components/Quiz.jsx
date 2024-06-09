@@ -55,38 +55,33 @@ function Quiz() {
 
             const cacheKey = `questions_${selectedTopics.join('_')}`;
 
-            // Check if data is already cached
-            const cachedQuestions = sessionStorage.getItem(cacheKey);
-            if (cachedQuestions) {
-                setQuestions(JSON.parse(cachedQuestions));
-                setLoading(false);
-                return;
-            }
+            // Clear the cache if the selected topics change
+            sessionStorage.removeItem(cacheKey);
 
             try {
                 let allQuestions = [];
-                for (let topic of selectedTopics) {
-                    const topicRef = collection(db, topic);
-                    const data = await getDocs(topicRef);
-                    allQuestions = [...allQuestions, ...data.docs.map(doc => ({ ...doc.data(), id: doc.id }))];
-                }
-
                 if (selectedTopics.length > 1) {
-                    // Shuffle and balance the questions equally if more than one topic is selected
-                    const topic1Questions = allQuestions.filter(q => q.topic === selectedTopics[0]);
-                    const topic2Questions = allQuestions.filter(q => q.topic === selectedTopics[1]);
-                    const balancedQuestions = [];
-                    for (let i = 0; i < 50; i++) {
-                        if (i % 2 === 0 && topic1Questions.length > 0) {
-                            balancedQuestions.push(topic1Questions.pop());
-                        } else if (topic2Questions.length > 0) {
-                            balancedQuestions.push(topic2Questions.pop());
-                        }
+                    const topicQuestionsMap = {};
+
+                    // Fetch and shuffle questions for each topic
+                    for (let topic of selectedTopics) {
+                        const topicRef = collection(db, topic);
+                        const data = await getDocs(topicRef);
+                        const questions = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+                        topicQuestionsMap[topic] = questions.sort(() => 0.5 - Math.random()).slice(0, 25);
                     }
-                    allQuestions = balancedQuestions;
+
+                    // Combine the questions from each topic and shuffle them together
+                    for (let topic of selectedTopics) {
+                        allQuestions = [...allQuestions, ...topicQuestionsMap[topic]];
+                    }
+                    allQuestions = allQuestions.sort(() => 0.5 - Math.random());
+
                 } else {
-                    // Shuffle and limit the questions if only one topic is selected
-                    allQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 50);
+                    // Fetch 50 questions from the single selected topic
+                    const topicRef = collection(db, selectedTopics[0]);
+                    const data = await getDocs(topicRef);
+                    allQuestions = data.docs.map(doc => ({ ...doc.data(), id: doc.id })).sort(() => 0.5 - Math.random()).slice(0, 50);
                 }
 
                 // Cache the questions
@@ -101,6 +96,7 @@ function Quiz() {
 
         fetchQuestions();
     }, [selectedTopics]);
+
 
     useEffect(() => {
         // Disable text selection
@@ -243,7 +239,8 @@ function Quiz() {
                                 `bg-lightGray rounded-lg py-1 px-2 flex justify-between my-1
                                 ${selectedOption === option ? 'shadow shadow-black' : ''}
                                 ${selectedOption === option && hasAnswered && gotRightAnswer ? 'shadow shadow-correct' : ''}
-                                ${selectedOption === option && hasAnswered && !gotRightAnswer ? 'shadow shadow-wrong' : ''}`
+                                ${selectedOption === option && hasAnswered && !gotRightAnswer ? 'shadow shadow-wrong' : ''}
+                                ${hasAnswered && questions[currentQuestionIndex].correctOption === option ? 'shadow shadow-correct' : ''}`
                             }
                         >
                             <label className='flex gap-2 font-Raleway' htmlFor={`option${index}`}>

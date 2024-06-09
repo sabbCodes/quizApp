@@ -15,12 +15,18 @@ function Topics() {
     const { topic } = useParams();
     const navigate = useNavigate();
 
-    const topicsRef = collection(db, `${topic}`);
-
     const notify = message => toast.error(message);
 
     useEffect(() => {
         const getTopics = async () => {
+            // Check if the topic is one of the unavailable topics
+            if (["pathology", "pharmacology", "microbiology", "physiology", "anatomy"].includes(topic)) {
+                setLoading(false);
+                notify('This course is not yet available, kindly check back later.');
+                return;
+            }
+
+            const topicsRef = collection(db, `${topic}`);
             try {
                 const data = await getDocs(topicsRef);
                 setTopics(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
@@ -37,7 +43,7 @@ function Topics() {
         };
 
         getTopics();
-    }, [topicsRef]);
+    }, [topic]);
 
     const handleCheck = (event, topicBranch) => {
         if (event.target.checked) {
@@ -103,7 +109,9 @@ function Topics() {
                                     type="checkbox"
                                     onChange={(event) => handleCheck(event, topic.branch)}
                                     checked={selectedTopics.includes(topic.branch)}
-                                    disabled={selectedTopics.length > 1 && !selectedTopics.includes(topic.branch)}
+                                    disabled={selectedTopics.length > 1 && !selectedTopics.includes(topic.branch)
+                                        || (topic.branch !== "cell biology" && topic.branch !== "metabolism of carbohydrates")
+                                    }
                                 />
                                 {topic.branch}
                             </label>
@@ -122,7 +130,8 @@ function Topics() {
                     </button>
                     <button
                         onClick={handleShuffle}
-                        className='py-2 px-10 gap-2 rounded-md md:px-6 md:max-w-52 w-60 h-10 my-2 border-blue text-blue border p-2 flex items-center hover:duration-1000 hover:scale-105 transition-all'
+                        className='py-2 px-10 gap-2 rounded-md md:px-6 md:max-w-52 w-60 h-10 my-2 border-blue text-blue border p-2 flex items-center hover:duration-1000 hover:scale-105 transition-all disabled:cursor-not-allowed'
+                        disabled={!topics.length}
                     >
                         Shuffle Questions
                         <img src={Shuffle} alt='shuffle icon' />
