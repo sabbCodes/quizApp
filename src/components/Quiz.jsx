@@ -227,7 +227,7 @@ function Quiz() {
                     </div>
                 ) : (
                     <p className='mt-4'>
-                        Ah snap!! We ran into an error there, but it is not your fault, please click
+                        Aw snap!! We ran into an error there, but it is not your fault, please click
                         <Link to={`/courseSelection/${topic}`} className='text-biochem underline ml-1'>here!</Link>
                     </p>
                 )}
