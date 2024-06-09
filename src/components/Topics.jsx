@@ -96,7 +96,7 @@ function Topics() {
                 </div>
             ) : (
                 <main className='my-4 mx-8'>
-                    {topics ? (
+                    {topics.length ? (
                         topics.map(topic => (
                             <label key={topic.id} className='capitalize flex gap-3 border-2 border-grey rounded-lg p-3 mb-2'>
                                 <input

@@ -32,7 +32,7 @@ function CourseSelection() {
     };
 
     return (
-        <main className='py-9 font-Raleway px-4 h-screen flex flex-col items-center'>
+        <main className='py-9 font-Raleway px-4 h-full flex flex-col items-center'>
             <div className='w-full md:max-w-96'>
                 <div className='flex items-center justify-between w-full mb-4 p-2 border-b border-grey relative'>
                     <div className='flex items-center'>
