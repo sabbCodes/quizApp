@@ -101,7 +101,7 @@ function SignUp() {
                 <form id='signUpForm' onSubmit={signUp}>
                     <button
                         type="button"
-                        className='flex items-center justify-center gap-3 my-4 border-2 rounded-md w-full text-lg font-bold p-1 hover:text-white'
+                        className='flex items-center justify-center gap-3 my-4 border-2 rounded-md w-full text-lg font-bold p-1 hover:text-grey'
                         onClick={signInWithGoogle}
                     >
                         <img src={GoogleImg} alt="Google" />
