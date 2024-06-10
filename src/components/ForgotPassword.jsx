@@ -24,21 +24,21 @@ function ForgotPassword() {
     };
 
     return (
-        <main className='bg-white font-Raleway h-screen px-3.5 py-10 flex justify-center'>
+        <main className='bg-white font-Raleway text-lg font-medium h-screen px-3.5 py-10 flex justify-center'>
             <div className='md:max-w-99'>
                 <form onSubmit={handleResetPassword}>
-                    <h2 className='text-center text-lg font-bold mb-4'>Reset Password</h2>
+                    <h2 className='text-center text-2xl font-bold mb-4'>Reset Password</h2>
                     <input
                         type='email'
                         id='email'
                         placeholder='Email'
-                        className='border-2 rounded-md w-full text-lg p-1 bg-white my-2 px-2 text-black'
+                        className='border-2 rounded-md w-full h-12 text-lg p-1 bg-white my-2 px-2 text-black'
                         onChange={e => setEmail(e.target.value)}
                         required
                     />
                     <button
                         type='submit'
-                        className='border-black rounded-md w-full text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black'
+                        className='border-black rounded-md w-full h-12 text-lg p-1 bg-black my-2 px-2 text-white hover:bg-white hover:text-black'
                         disabled={loading}
                     >
                         {loading ? (
@@ -54,7 +54,7 @@ function ForgotPassword() {
                             </div>
                         ) : "Send Reset Email"}
                     </button>
-                    <p className='text-center text-lg'><Link to='/login'>Back to Login</Link></p>
+                    <p className='text-center text-lg'><Link to='/login' className='hover:text-gray hover:cursor-pointer'>Back to Login</Link></p>
                 </form>
             </div>
             <ToastContainer />
